@@ -1,4 +1,4 @@
-use crate::read_from_file;
+use advent_of_code_2022::read_from_file;
 
 const REAL_INPUT: &str = "inputs/day_two/input";
 const TEST_INPUT: &str = "inputs/day_two/test";

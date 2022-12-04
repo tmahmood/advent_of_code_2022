@@ -1,16 +1,22 @@
 use std::fs::File;
 use std::io::Read;
-use crate::read_from_file;
+use advent_of_code_2022::read_from_file;
 
-fn get_elf_with_maximum_calories(input: &str) -> i32 {
+fn main() {
+    let r1 = advent_of_code_2022::day_one::get_elf_with_maximum_calories("inputs/day_one/test");
+    let r2 = advent_of_code_2022::day_one::get_elf_with_maximum_calories("inputs/day_one/test");
+    println!("{} {}", r1, r2);
+}
+
+pub fn get_elf_with_maximum_calories(input: &str) -> i32 {
     let content = read_from_file(input);
     let lines = content.split("\n").collect::<Vec<&str>>();
     let mut elf = 0;
     let mut max_calories = 0;
-    let mut elvs = vec![];
+    let mut elves = vec![];
     lines.iter().for_each(|line| {
         if line == &"" {
-            elvs.push(elf);
+            elves.push(elf);
             if elf > max_calories { max_calories = elf }
             elf = 0;
         } else {
@@ -18,8 +24,8 @@ fn get_elf_with_maximum_calories(input: &str) -> i32 {
             elf += n.unwrap();
         }
     });
-    elvs.sort();
-    println!("{}", &elvs[elvs.len() - 3..elvs.len()].iter().sum::<i32>());
+    elves.sort();
+    println!("{}", &elves[elves.len() - 3..elves.len()].iter().sum::<i32>());
     max_calories
 }
 

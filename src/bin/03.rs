@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use lazy_static::lazy_static;
-use crate::read_from_file;
+use advent_of_code_2022::read_from_file;
 
 const REAL_INPUT: &str = "inputs/day_three/input";
 const TEST_INPUT: &str = "inputs/day_three/test";
@@ -14,6 +14,13 @@ lazy_static! {
         }
         m
     };
+}
+
+fn main() {
+    let a1 = calculate_total_priorities(TEST_INPUT);
+    let a2 = calculate_total_priorities(REAL_INPUT);
+    println!("{} {}", a1, a2);
+
 }
 
 fn sort_and_dedup(a: &str) -> Vec<usize> {
