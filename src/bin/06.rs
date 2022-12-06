@@ -9,7 +9,6 @@ fn main() {
     println!("{}", k);
     let k = find_marker(input, 14);
     println!("{}", k);
-
 }
 
 #[cfg(test)]
@@ -30,11 +29,12 @@ mod tests {
 pub(crate) fn find_marker(line: String, marker_length: usize) -> usize {
     let m = marker_length - 1;
     let chars = line.split("").filter(|c| c != &"").collect::<Vec<&str>>();
-    for k in m..chars.len() {
-        let recent = chars[(k-m)..=k].to_vec();
-        let l: HashSet<&str> = HashSet::from_iter(recent);
-        if l.len() == marker_length {
-            return k + 1;
+    let mut s = chars.windows(marker_length).enumerate();
+    while let Some((d, x)) = s.next() {
+        let recent: HashSet<&str> = HashSet::from_iter(x.to_vec());
+        if recent.len() == marker_length {
+            println!("found!");
+            return d + marker_length;
         }
     }
     0
