@@ -33,7 +33,6 @@ pub(crate) fn find_marker(line: String, marker_length: usize) -> usize {
     while let Some((d, x)) = s.next() {
         let recent: HashSet<&str> = HashSet::from_iter(x.to_vec());
         if recent.len() == marker_length {
-            println!("found!");
             return d + marker_length;
         }
     }
