@@ -27,7 +27,7 @@ fn find_smallest_d_to_delete(hash_map: &HashMap<String, Vec<i32>>) -> i32 {
         .sorted()
         .collect::<Vec<i32>>();
     let used = v.pop().unwrap();
-    for (k, v) in hash_map.iter() {
+    for (_k, v) in hash_map.iter() {
         let sum = v.iter().sum::<i32>();
         if 70000000 - used + sum > 30000000 {
             return sum;
