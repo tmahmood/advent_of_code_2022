@@ -1,4 +1,4 @@
-use advent_of_code_2022::read_from_file;
+use advent_of_code_2022::{end_it, read_from_file, start_it};
 use itertools::Itertools;
 use std::collections::HashMap;
 
@@ -48,6 +48,7 @@ impl Grid {
 }
 
 fn main() {
+    let start = start_it();
     let mut visibility_count = 0;
     let grid = Grid::new(read_from_file(REAL_DATA));
     let mut tree_visible = vec![false; grid.size * grid.size];
@@ -88,12 +89,12 @@ fn main() {
             stack.push(count);
         }
         let sum = stack.iter().product::<usize>();
-        println!("{ii}-{current_tree}: {stack:?}: {sum}");
         if sum > max {
             max = sum
         }
     }
     println!("{visibility_count} {max}");
+    end_it(start)
 }
 
 #[test]
