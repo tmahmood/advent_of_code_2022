@@ -1,5 +1,6 @@
 use advent_of_code_2022::{end_it, read_from_file, start_it};
 use itertools::Itertools;
+use std::cmp::max;
 use std::collections::HashMap;
 
 const REAL_DATA: &str = "inputs/d8.real";
@@ -13,11 +14,9 @@ struct Grid {
 impl Grid {
     pub fn new(content: String) -> Self {
         let grid = content
-            .lines()
-            .join("")
-            .split("")
-            .filter(|&v| !v.is_empty())
-            .map(|v| v.parse::<usize>().unwrap())
+            .replace('\n', "")
+            .chars()
+            .map(|v| v.to_digit(10).unwrap() as usize)
             .collect::<Vec<usize>>();
         let size = content.lines().count();
         Self { grid, size }
@@ -49,21 +48,17 @@ impl Grid {
 
 fn main() {
     let start = start_it();
-    let mut visibility_count = 0;
     let grid = Grid::new(read_from_file(REAL_DATA));
     let mut tree_visible = vec![false; grid.size * grid.size];
-    let mut max = 0;
+    let mut max_score = 0;
     for (ii, current_tree) in grid.grid.iter().enumerate() {
         let pos = grid.tree_position(ii + 1);
         if grid.is_on_edge(pos) {
-            if !tree_visible[ii] {
-                visibility_count += 1;
-                tree_visible[ii] = true;
-            }
+            tree_visible[ii] = true;
             continue;
         }
         let to_check: Vec<(i32, i32)> = vec![(0, -1), (0, 1), (-1, 0), (1, 0)];
-        let mut stack = vec![];
+        let mut scenic_score = 1;
         for nn in to_check {
             let mut start_pos = pos;
             let mut count = 0;
@@ -80,20 +75,17 @@ fn main() {
                 start_pos = next_pos;
                 if grid.is_on_edge(start_pos) {
                     if !tree_visible[ii] {
-                        visibility_count += 1;
                         tree_visible[ii] = true;
                     }
                     break;
                 }
             }
-            stack.push(count);
+            scenic_score *= count;
         }
-        let sum = stack.iter().product::<usize>();
-        if sum > max {
-            max = sum
-        }
+        max_score = max(scenic_score, max_score);
     }
-    println!("{visibility_count} {max}");
+    let c = tree_visible.iter().filter(|&v| *v).count();
+    println!("{c} {max_score}");
     end_it(start)
 }
 

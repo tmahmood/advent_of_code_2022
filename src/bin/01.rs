@@ -1,11 +1,10 @@
-use std::fs::File;
-use std::io::Read;
-use advent_of_code_2022::read_from_file;
+use advent_of_code_2022::{end_it, read_from_file, start_it};
 
 fn main() {
-    let r1 = advent_of_code_2022::day_one::get_elf_with_maximum_calories("inputs/day_one/test");
-    let r2 = advent_of_code_2022::day_one::get_elf_with_maximum_calories("inputs/day_one/test");
-    println!("{} {}", r1, r2);
+    let start = start_it();
+    let r1 = get_elf_with_maximum_calories("inputs/d1");
+    println!("{r1}");
+    end_it(start)
 }
 
 pub fn get_elf_with_maximum_calories(input: &str) -> i32 {
@@ -17,7 +16,9 @@ pub fn get_elf_with_maximum_calories(input: &str) -> i32 {
     lines.iter().for_each(|line| {
         if line == &"" {
             elves.push(elf);
-            if elf > max_calories { max_calories = elf }
+            if elf > max_calories {
+                max_calories = elf
+            }
             elf = 0;
         } else {
             let n = line.parse::<i32>();
@@ -25,7 +26,10 @@ pub fn get_elf_with_maximum_calories(input: &str) -> i32 {
         }
     });
     elves.sort();
-    println!("{}", &elves[elves.len() - 3..elves.len()].iter().sum::<i32>());
+    println!(
+        "{}",
+        &elves[elves.len() - 3..elves.len()].iter().sum::<i32>()
+    );
     max_calories
 }
 
