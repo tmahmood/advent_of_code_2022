@@ -37,13 +37,14 @@ fn dist(p1: &Point, p2: &Point) -> i32 {
     (((p2.x - p1.x).pow(2) + (p2.y - p1.y).pow(2)) as f64).sqrt() as i32
 }
 
-fn comp(x: &i32) -> i32 {
-    match 0.cmp(x) {
+fn comp(val: &i32) -> i32 {
+    match 0.cmp(val) {
         Ordering::Greater => -1,
         Ordering::Less => 1,
         Ordering::Equal => 0,
     }
 }
+
 fn direction(p: &Point, target: &Point) -> Point {
     let x = target.x - p.x;
     let y = target.y - p.y;
@@ -55,18 +56,17 @@ fn direction(p: &Point, target: &Point) -> Point {
 fn main() {
     let timer = start_it();
     let moves = read_from_file(REAL_DATA);
-    let unique_moves = follow_head(moves.clone(), 1);
+    let unique_moves = follow_head(moves.clone(), 2);
     println!("{unique_moves}");
-    let unique_moves = follow_head(moves, 9);
+    let unique_moves = follow_head(moves, 10);
     println!("{unique_moves}");
     end_it(timer);
 }
 
 fn follow_head(moves: String, keep_track: i32) -> usize {
-    let mut head = Point::new(0, 0);
-    let mut tails = vec![Point::new(0, 0); keep_track as usize];
+    let mut knots = vec![Point::new(0, 0); keep_track as usize];
     let mut went_to = HashSet::new();
-    went_to.insert(tails.last().unwrap().clone());
+    went_to.insert(knots.last().unwrap().clone());
     moves
         .lines()
         .map(|line| {
@@ -76,19 +76,15 @@ fn follow_head(moves: String, keep_track: i32) -> usize {
         })
         .for_each(|(p1, c)| {
             for _ in 0..c {
-                head.move_to(p1);
-                for ii in 0..keep_track as usize {
-                    let last = if ii == 0 {
-                        head.clone()
-                    } else {
-                        tails[ii - 1].clone()
-                    };
-                    let d = dist(&last, &tails[ii]);
-                    if d > 1 {
-                        let next = direction(&tails[ii], &last);
-                        tails[ii].translate(&next);
+                knots.get_mut(0).unwrap().move_to(p1);
+                for ii in 1..keep_track as usize {
+                    let last = knots[ii - 1].clone();
+                    let current = &mut knots[ii];
+                    if dist(&last, current) > 1 {
+                        let next = direction(current, &last);
+                        current.translate(&next);
                         if ii == (keep_track - 1) as usize {
-                            went_to.insert(tails.last().unwrap().clone());
+                            went_to.insert(knots.last().unwrap().clone());
                         }
                     }
                 }
@@ -117,12 +113,16 @@ mod tests {
     #[test]
     fn test_grid_walking() {
         let moves = read_from_file(TEST_DATA);
-        let positions = follow_head(moves, 1);
+        let positions = follow_head(moves, 2);
         assert_eq!(positions, 13);
 
         let moves = read_from_file(TEST_DATA_L);
-        let positions = follow_head(moves, 9);
+        let positions = follow_head(moves, 10);
         assert_eq!(positions, 36);
+
+        let moves = read_from_file(REAL_DATA);
+        let positions = follow_head(moves, 10);
+        assert_eq!(positions, 2630);
     }
 
     #[test]
