@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::fs::File;
 use std::io::Read;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 pub fn read_from_file(input: &str) -> String {
     let mut content = String::new();
