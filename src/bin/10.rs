@@ -14,10 +14,14 @@ fn main() {
 fn process(file_name: &str) -> i32 {
     let content = read_from_file(file_name);
     let state = parse_instructions(&content);
-    let mut strength: i32 = 0;
-    for cycle in (20..=220).step_by(40) {
-        strength += state.state_at(cycle) * cycle as i32;
-    }
+    let strength = state
+        .cycle_states
+        .iter()
+        .enumerate()
+        .skip(20)
+        .step_by(40)
+        .map(|(cycle, x)| (cycle as i32) * x)
+        .sum::<i32>();
     println!("{}", state.draw_image());
     strength
 }
