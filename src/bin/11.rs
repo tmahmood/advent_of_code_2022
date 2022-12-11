@@ -73,15 +73,13 @@ fn monkey_business(
         } else {
             monkey.operation.1.parse::<u64>().unwrap()
         };
-        let mut new_level = if monkey.operation.0 == "+" {
+        let new_level = if monkey.operation.0 == "+" {
             item + op_with
         } else {
             item * op_with
         };
-
         let new_level = if reduce_worry {
-            new_level /= 3;
-            new_level
+            new_level / 3
         } else {
             new_level % lcm
         };
